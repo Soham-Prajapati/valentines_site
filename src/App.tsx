@@ -129,7 +129,7 @@ const CONFETTI_DATA = Array.from({ length: 120 }).map(() => ({
 
 // --- End Constants ---
 
-function Heart({ onTap }: { onTap: () => void }) {
+function Heart({ onTap, scale, initialPosition }: { onTap: () => void; scale: number; initialPosition: [number, number, number] }) {
   const groupRef = useRef<Group | null>(null);
   const glowRef = useRef<THREE.PointLight | null>(null);
   const mouse = useRef({ x: 0, y: 0 });
@@ -167,7 +167,7 @@ function Heart({ onTap }: { onTap: () => void }) {
         }
       }
     });
-    scene.scale.set(HEART_SCALE, HEART_SCALE, HEART_SCALE);
+    scene.scale.set(scale, scale, scale);
   }, [scene]);
 
   useEffect(() => {
@@ -181,8 +181,8 @@ function Heart({ onTap }: { onTap: () => void }) {
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.position.x += (mouse.current.x * HEART_MOUSE_EFFECT_STRENGTH_POSITION + HEART_INITIAL_POSITION[0] - groupRef.current.position.x) * HEART_MOUSE_EFFECT_LERP_FACTOR;
-      groupRef.current.position.y += (mouse.current.y * HEART_MOUSE_EFFECT_STRENGTH_POSITION + HEART_INITIAL_POSITION[1] - groupRef.current.position.y) * HEART_MOUSE_EFFECT_LERP_FACTOR;
+      groupRef.current.position.x += (mouse.current.x * HEART_MOUSE_EFFECT_STRENGTH_POSITION + initialPosition[0] - groupRef.current.position.x) * HEART_MOUSE_EFFECT_LERP_FACTOR;
+      groupRef.current.position.y += (mouse.current.y * HEART_MOUSE_EFFECT_STRENGTH_POSITION + initialPosition[1] - groupRef.current.position.y) * HEART_MOUSE_EFFECT_LERP_FACTOR;
       groupRef.current.rotation.set(0, 0, 0);
 
       // Smooth spring-based beat animation
@@ -192,7 +192,7 @@ function Heart({ onTap }: { onTap: () => void }) {
       beatVelocity.current += force;
       beatVelocity.current *= (1 - damping);
       beatScale.current += beatVelocity.current;
-      const s = HEART_SCALE * beatScale.current;
+      const s = scale * beatScale.current;
       // Gentle idle breathing
       const breath = 1 + Math.sin(state.clock.elapsedTime * 1.2) * 0.015;
       const finalS = s * breath;
@@ -215,7 +215,7 @@ function Heart({ onTap }: { onTap: () => void }) {
   };
 
   return (
-    <group ref={groupRef} position={HEART_INITIAL_POSITION} onClick={handleClick}>
+    <group ref={groupRef} position={initialPosition} onClick={handleClick}>
       <primitive object={scene} />
       <pointLight ref={glowRef} position={[0, 0, 2]} color="#ff8fa8" intensity={0} distance={15} decay={2} />
     </group>
@@ -278,10 +278,11 @@ function CloudMesh({ position, scale, opacity, img }: {
 }
 
 // Camera fly-through controller — stays at end position after arriving
-function CameraFlyThrough({ isFlying, onArrived }: { isFlying: boolean; onArrived: () => void }) {
+function CameraFlyThrough({ isFlying, onArrived, startZ }: { isFlying: boolean; onArrived: () => void; startZ?: number }) {
   const progress = useRef(0);
   const hasArrived = useRef(false);
   const hasStarted = useRef(false);
+  const startZUsed = startZ ?? CAMERA_START_Z;
 
   useFrame((state, delta) => {
     const cam = state.camera;
@@ -294,7 +295,7 @@ function CameraFlyThrough({ isFlying, onArrived }: { isFlying: boolean; onArrive
     // Before flying starts, hold at start
     if (!isFlying) {
       if (!hasStarted.current) {
-        cam.position.set(0, 0, CAMERA_START_Z);
+        cam.position.set(0, 0, startZUsed);
       }
       return;
     }
@@ -303,7 +304,7 @@ function CameraFlyThrough({ isFlying, onArrived }: { isFlying: boolean; onArrive
     progress.current = Math.min(progress.current + delta / FLY_DURATION, 1);
     const eased = 1 - Math.pow(1 - progress.current, 3);
     
-    cam.position.z = MathUtils.lerp(CAMERA_START_Z, CAMERA_END_Z, eased);
+    cam.position.z = MathUtils.lerp(startZUsed, CAMERA_END_Z, eased);
     cam.position.y = Math.sin(progress.current * Math.PI * 2) * 0.3;
     cam.position.x = Math.sin(progress.current * Math.PI * 3) * 0.5;
     
@@ -340,6 +341,30 @@ function App() {
   const [heartGlowing, setHeartGlowing] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Responsive settings for the heart model and camera
+  const [responsiveSettings, setResponsiveSettings] = useState<{ scale: number; initialPosition: [number, number, number]; cameraZ: number }>({
+    scale: HEART_SCALE,
+    initialPosition: HEART_INITIAL_POSITION,
+    cameraZ: CAMERA_START_Z,
+  });
+
+  useEffect(() => {
+    const compute = () => {
+      const w = window.innerWidth;
+      if (w <= 420) {
+        return { scale: HEART_SCALE * 0.55, initialPosition: [0, -1.2, -4] as [number, number, number], cameraZ: CAMERA_START_Z + 8 };
+      }
+      if (w <= 768) {
+        return { scale: HEART_SCALE * 0.75, initialPosition: [0, -1.8, -4.5] as [number, number, number], cameraZ: CAMERA_START_Z + 4 };
+      }
+      return { scale: HEART_SCALE, initialPosition: HEART_INITIAL_POSITION, cameraZ: CAMERA_START_Z };
+    };
+    const apply = () => setResponsiveSettings(compute());
+    apply();
+    window.addEventListener('resize', apply);
+    return () => window.removeEventListener('resize', apply);
+  }, []);
 
   const toggleMute = useCallback(() => {
     setIsMuted((prev) => {
@@ -465,7 +490,7 @@ function App() {
         </div>
       )}
       <Canvas
-        camera={{ position: [0, 0, CAMERA_START_Z], fov: 75 }}
+        camera={{ position: [0, 0, responsiveSettings.cameraZ], fov: 75 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 2]}
       >
@@ -479,10 +504,10 @@ function App() {
           <pointLight position={[5, -2, -3]} intensity={1.2} color="#ff1493" />
           <Environment preset="sunset" environmentIntensity={0.4} />
 
-          <CameraFlyThrough isFlying={isFlying} onArrived={handleArrived} />
+          <CameraFlyThrough isFlying={isFlying} onArrived={handleArrived} startZ={responsiveSettings.cameraZ} />
 
           {/* Heart — always present, camera flies toward it */}
-          <Heart onTap={handleHeartTap} />
+          <Heart onTap={handleHeartTap} scale={responsiveSettings.scale} initialPosition={responsiveSettings.initialPosition} />
 
           {/* Tunnel clouds — camera flies through these */}
           {TUNNEL_CLOUDS.map((c, i) => (
