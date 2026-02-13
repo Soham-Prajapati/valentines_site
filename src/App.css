@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+.App-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  background: url('/images/clouds/Cloud Image.png') center center / cover no-repeat;
+}
+
+/* Very subtle pink clouds overlay on top of the sky background */
+.pink-overlay {
+  position: absolute;
+  inset: 0;
+  background: url('/images/clouds/Pink Clouds Background.avif') center center / cover no-repeat;
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 0;
+}
+
+canvas {
+  display: block;
+  touch-action: none; /* Prevent zoom on touch devices */
+}
+
+.loading-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #fffaf5 0%, #e8e8e8 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #c72c84;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 2.5em;
+  z-index: 1000;
+  transition: opacity 0.6s ease-out;
+  opacity: 1;
+}
+
+.loading-fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.enter-button {
+  margin-top: 30px;
+  font-family: 'Patrick Hand', cursive;
+  padding: 20px 50px;
+  font-size: 1.8em;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; /* Hand-drawn look */
+  cursor: pointer;
+  border: 4px solid #e05d9e;
+  box-shadow: 6px 6px 0px #e05d9e;
+  background-color: #ffc2e2;
+  color: #c72c84;
+  transition: all 0.15s ease-in-out;
+  text-shadow: 1px 1px 0px white;
+  animation: pulse 2s infinite;
+  outline: none; /* Remove blue focus outline */
+}
+
+.enter-button:focus {
+  outline: none; /* Remove blue focus outline */
+}
+
+.enter-button:hover {
+  background-color: #ffb3d9;
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0px #e05d9e;
+}
+
+.enter-button:active {
+  transform: translate(6px, 6px);
+  box-shadow: 0px 0px 0px #e05d9e;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.valentine-question {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  text-align: center;
+  padding: 12px 24px;
+  border: 4px solid #e05d9e;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  background: #fff6fb;
+  box-shadow: 6px 6px 0px #e05d9e;
+}
+
+.valentine-question h1 {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 3em;
+  color: #c72c84;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.valentine-buttons {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+.valentine-buttons button {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive; /* Playful font */
+  padding: 15px 30px;
+  font-size: 1.5em;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; /* Hand-drawn look */
+  cursor: pointer;
+  border: 3px solid #e05d9e; /* Thicker, solid border */
+  box-shadow: 4px 4px 0px #e05d9e; /* 2D shadow effect */
+  transition: all 0.1s ease-in-out;
+  flex-grow: 1;
+  max-width: 300px;
+  text-shadow: 1px 1px 0px white;
+}
+
+/* Style for the 'Yes' button */
+.yes-button {
+  background-color: #ffc2e2; /* Pink */
+  color: #c72c84; /* Darker pink text */
+  border-color: #e05d9e;
+  box-shadow: 4px 4px 0px #e05d9e;
+}
+
+.yes-button:hover {
+  background-color: #ffb3d9;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #e05d9e;
+}
+
+.yes-button:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #e05d9e;
+}
+
+/* Style for the 'No' button */
+.no-button {
+  background-color: #f0f0f0; /* Grey */
+  color: #888;
+  border-color: #aaa;
+  box-shadow: 4px 4px 0px #aaa;
+  z-index: 1000;
+  transition: none;
+}
+
+.no-button:hover {
+  background-color: #e0e0e0;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #aaa;
+}
+
+.no-button:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #aaa;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .valentine-question h1 {
+    font-size: 2em;
+  }
+
+  .valentine-buttons {
+    flex-direction: column; /* Stack buttons vertically */
+    bottom: 5%;
+  }
+
+  .valentine-buttons button {
+    font-size: 1.1em;
+    padding: 15px 25px;
+    max-width: 80%; /* Adjust max width for stacked buttons */
+  }
+}
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1500;
+}
+
+.confetti-heart {
+  position: absolute;
+  top: -60px;
+  object-fit: contain;
+  pointer-events: none;
+  animation: heartFall linear forwards;
+  animation-duration: var(--duration, 2s);
+  animation-delay: var(--delay, 0s);
+  opacity: 0;
+  image-rendering: auto;
+  -webkit-image-rendering: auto;
+  will-change: transform, opacity;
+}
+
+@keyframes heartFall {
+  0% {
+    transform: translateY(-5vh) translateX(0) rotate(var(--start-rot, 0deg)) scale(0.5);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+    transform: translateY(0vh) translateX(calc(var(--sway, 20px) * 0.2)) rotate(var(--start-rot, 0deg)) scale(1);
+  }
+  25% {
+    transform: translateY(25vh) translateX(calc(var(--sway, 20px) * -0.4)) rotate(calc(var(--start-rot, 0deg) + 8deg)) scale(0.95);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(50vh) translateX(calc(var(--sway, 20px) * 0.3)) rotate(calc(var(--start-rot, 0deg) - 6deg)) scale(0.9);
+    opacity: 0.9;
+  }
+  75% {
+    transform: translateY(75vh) translateX(calc(var(--sway, 20px) * -0.2)) rotate(calc(var(--start-rot, 0deg) + 4deg)) scale(0.88);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(110vh) translateX(calc(var(--sway, 20px) * 0.1)) rotate(var(--start-rot, 0deg)) scale(0.85);
+    opacity: 0;
+  }
+}
+
+/* Yes Modal */
+.yes-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.yes-modal {
+  background: linear-gradient(135deg, #fff6fb 0%, #ffe4ef 100%);
+  border: 4px solid #e05d9e;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow: 8px 8px 0px #e05d9e;
+  padding: 40px 50px;
+  max-width: 480px;
+  width: 90%;
+  text-align: center;
+  font-family: 'Patrick Hand', cursive;
+  position: relative;
+  animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.yes-modal h2 {
+  font-size: 2.5em;
+  color: #c72c84;
+  margin: 0 0 12px 0;
+}
+
+.yes-modal p {
+  font-size: 1.3em;
+  color: #d4568a;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.yes-modal-message {
+  margin-top: 16px !important;
+  font-size: 1.15em !important;
+  color: #8b3a62 !important;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.yes-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #c72c84;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  font-family: 'Patrick Hand', cursive;
+}
+
+.yes-modal-close:hover {
+  color: #a01060;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPop {
+  0% { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
