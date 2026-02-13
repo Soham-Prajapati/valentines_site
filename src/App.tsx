@@ -344,7 +344,13 @@ function App() {
   const toggleMute = useCallback(() => {
     setIsMuted((prev) => {
       const next = !prev;
-      if (audioRef.current) audioRef.current.muted = next;
+      if (audioRef.current) {
+        if (next) {
+          audioRef.current.pause();
+        } else {
+          audioRef.current.play().catch(() => {});
+        }
+      }
       return next;
     });
   }, []);
@@ -435,7 +441,7 @@ function App() {
     <div className="App-container">
       <div className="pink-overlay" />
       {hasEntered && (
-        <button className="audio-toggle-button" onClick={toggleMute} title={isMuted ? 'Unmute' : 'Mute'}>
+      <button className="audio-toggle-button" onClick={toggleMute} title={isMuted ? 'Play' : 'Pause'}>
           <svg width="102" height="69" viewBox="0 0 102 69" className="audio-bars-playing" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: isMuted ? 'none' : 'block' }}>
             <rect y="17" width="24" height="37" fill="white" />
             <rect x="39" width="24" height="69" fill="white" />
