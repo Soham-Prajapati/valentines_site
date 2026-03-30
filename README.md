@@ -1,73 +1,52 @@
-# React + TypeScript + Vite
+# 💖 Be My Valentine
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An immersive, interactive 3D Valentine's experience built with **React**, **Three.js**, and a touch of magic. This project features a cinematic camera fly-through, a responsive 3D heart model, and playful interactions to ask that special someone to be your Valentine.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Check out the live site here: [https://be-my-valentine-by-soup.vercel.app/](https://be-my-valentine-by-soup.vercel.app/)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Features
 
-## Expanding the ESLint configuration
+- **🎬 Cinematic Entrance:** A camera fly-through animation that takes you through a "cloud tunnel" into the heart of the experience.
+- **❤️ Interactive 3D Heart:** A beautifully rendered 3D heart model that responds to mouse movements, clicks, and has a natural "breathing" animation.
+- **☁️ Parallax Atmosphere:** Multiple layers of clouds with parallax effects and ambient drift creating a dreamy, immersive environment.
+- **🎵 Multi-sensory Experience:** Background music, "rizz" sound effects, fireworks, and confetti pops to enhance the mood.
+- **🎮 Playful Interaction:**
+  - A "Will you be my valentine?" question with a "Yes" and a mischievous "No" button.
+  - The "No" button dodges the cursor and eventually disappears, making "Yes" the only option!
+- **🎉 Celebratory Finale:** Clicking "Yes" triggers a burst of fireworks, heart-shaped confetti, and a success modal with a heartfelt message.
+- **📱 Fully Responsive:** Optimized for desktop and mobile devices with adjusted 3D scaling and camera positions.
+- **🔇 Audio Controls:** Integrated mute/play toggle for the background music.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠️ Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Frontend:** [React 18](https://reactjs.org/)
+- **3D Engine:** [Three.js](https://threejs.org/) via [@react-three/fiber](https://github.com/pmndrs/react-three-fiber) & [@react-three/drei](https://github.com/pmndrs/drei)
+- **Build Tool:** [Vite](https://vitejs.dev/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Deployment:** [Vercel](https://vercel.com/)
+- **Analytics:** [@vercel/analytics](https://vercel.com/docs/analytics)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📂 Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `src/App.tsx`: The main application logic, 3D scene setup, and interaction handling.
+- `src/App.css`: Custom styles for the UI, hand-drawn button effects, and CSS animations.
+- `public/`: Assets including the 3D heart model (`.glb`), audio files, gifs, and images.
+- `_bmad/`: Project planning and agent configuration artifacts.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 📝 License
+
+This project is for personal use and spreading love. Feel free to fork it and customize it for your special someone!
+
+---
+
+*Made with ❤️ by Soup*
