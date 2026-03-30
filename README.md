@@ -39,7 +39,6 @@ Check out the live site here: [https://be-my-valentine-by-soup.vercel.app/](http
 - `src/App.tsx`: The main application logic, 3D scene setup, and interaction handling.
 - `src/App.css`: Custom styles for the UI, hand-drawn button effects, and CSS animations.
 - `public/`: Assets including the 3D heart model (`.glb`), audio files, gifs, and images.
-- `_bmad/`: Project planning and agent configuration artifacts.
 
 ---
 
